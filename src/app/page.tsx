@@ -151,25 +151,14 @@ export default function Home() {
       <div className="font-sans max-w-xl mx-auto p-6 bg-secondary text-primary text-center rounded-md shadow-2xl">
         <h1 className="text-3xl font-bold mb-4">Constitution to Home: Counter Point Community</h1>
         {
-          !showInput ? (
-            <div>
-              <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image.jpeg'} className='w-1/2 mx-auto h-auto' />
-              <Input
-                type="text"
-                placeholder="Enter your name"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                className="p-2 my-4 border rounded-md bg-primary-foreground text-black"
-              />
-              <Button onClick={() => setShowInput(true)} disabled={!userName} className='w-full max-w-96' variant="default">Create</Button>
-            </div>
-          ) : !isCropping && !croppedImage ?  (
-              <div className="mb-6">
+           !isCropping && !croppedImage ?  (
+              <div className="">
+                <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image.jpeg'} className='w-1/2 mx-auto h-auto' />
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  className="p-2 border rounded-md bg-white text-black"
+                  className="p-2 border rounded-md mt-4 bg-white text-black"
                 />
               </div>
             ) : null
