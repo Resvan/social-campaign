@@ -1,17 +1,12 @@
 'use client';
 import React, { useRef, useState, useCallback } from 'react';
 import Cropper, { Area, Point } from 'react-easy-crop';
-
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"
 import  NextImage from 'next/image';
 
 
 
 export default function Home() {
 
-  const [userName, setUserName] = useState<string>('');
-  const [showInput, setShowInput] = useState<boolean>(false);
   const [userImage, setUserImage] = useState<string | null>(null);
   const [croppedArea, setCroppedArea] = useState<Area | null>(null);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
