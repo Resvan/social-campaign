@@ -3,7 +3,7 @@ import React, { useRef, useState, useCallback } from 'react';
 import Cropper, { Area, Point } from 'react-easy-crop';
 
 import { Input } from "@/components/ui/input";
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import  NextImage from 'next/image';
 
 
@@ -199,7 +199,9 @@ export default function Home() {
         {croppedImage && !finalImage && (
           <div className="mt-4">
             <h3 className="text-xl mb-2">Cropped Image Preview</h3>
-            <img
+            <NextImage
+              height={1349}
+              width={2415}
               src={croppedImage}
               alt="Cropped Preview"
               className="w-full max-w-sm mx-auto rounded-lg shadow-lg mb-4"
@@ -218,7 +220,9 @@ export default function Home() {
         {finalImage && (
           <div className="mt-6">
             <h3 className="text-xl mb-2">Final Image</h3>
-            <img
+            <NextImage
+              height={3500}
+              width={3000}
               src={finalImage}
               alt="Final Image"
               className="w-full rounded-lg shadow-lg mb-4"
