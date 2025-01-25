@@ -101,7 +101,7 @@ export default function Home() {
 
     const baseImage = new Image();
     baseImage.crossOrigin = 'anonymous'; // Handle cross-origin if needed
-    baseImage.src = '/base-image.jpeg'; // Ensure this path is correct
+    baseImage.src = '/base-image.png'; // Ensure this path is correct
 
     baseImage.onload = () => {
       canvas.width = baseImage.width;
@@ -148,7 +148,7 @@ export default function Home() {
         {
            !isCropping && !croppedImage ?  (
               <div className="">
-                <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image.jpeg'} className='w-1/2 mx-auto h-auto' />
+                <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image.png'} className='w-1/2 mx-auto h-auto' />
                 <input
                   type="file"
                   accept="image/*"
