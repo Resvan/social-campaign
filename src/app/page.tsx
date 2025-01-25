@@ -112,10 +112,10 @@ export default function Home() {
       userImg.src = croppedImage;
 
       userImg.onload = () => {
-        const x = 290;
-        const y = 1075;
-        const width = 2415;
-        const height = 1349;
+        const x = 302;
+        const y = 1078;
+        const width = 2400;
+        const height = 1347;
 
         ctx.drawImage(userImg, x, y, width, height);
         const finalImageUrl = canvas.toDataURL('image/png');
