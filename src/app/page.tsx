@@ -53,6 +53,19 @@ export default function Home() {
           return;
         }
 
+              // Circular clipping
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(
+        crop.width / 2,
+        crop.height / 2,
+        crop.width / 2,
+        0,
+        Math.PI * 2
+      );
+      ctx.closePath();
+      ctx.clip();
+
         ctx.drawImage(
           image,
           crop.x,
@@ -94,43 +107,54 @@ export default function Home() {
 
   const generateImage = (): void => {
     if (!canvasRef.current || !croppedImage) return;
-
+  
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
+  
     const baseImage = new Image();
-    baseImage.crossOrigin = 'anonymous'; // Handle cross-origin if needed
-    baseImage.src = '/base-image.png'; // Ensure this path is correct
-
+    baseImage.crossOrigin = 'anonymous';
+    baseImage.src = '/base-image-1.png';
+  
     baseImage.onload = () => {
       canvas.width = baseImage.width;
       canvas.height = baseImage.height;
       ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height);
-
+  
       const userImg = new Image();
       userImg.src = croppedImage;
-
+  
       userImg.onload = () => {
-        const x = 302;
-        const y = 1078;
-        const width = 2400;
-        const height = 1347;
-
+        const x = 1028;
+        const y = 587;
+        const width = 676;
+        const height = 677;
+  
+        // Clip into a circle before drawing the user image
+        ctx.save(); // Save the current context state
+        ctx.beginPath();
+        ctx.arc(x + width / 2, y + height / 2, width / 2, 0, Math.PI * 2); // Circle clip
+        ctx.closePath();
+        ctx.clip(); // Apply the clipping path
+  
         ctx.drawImage(userImg, x, y, width, height);
+  
+        ctx.restore(); // Restore the original context so clipping doesn't affect other drawings
+  
         const finalImageUrl = canvas.toDataURL('image/png');
         setFinalImage(finalImageUrl);
       };
-
+  
       userImg.onerror = (err) => {
         console.error('Error loading cropped image:', err);
       };
     };
-
+  
     baseImage.onerror = (err) => {
       console.error('Error loading base image:', err);
     };
   };
+  
 
   const downloadImage = (): void => {
     if (!finalImage) return;
@@ -144,11 +168,11 @@ export default function Home() {
   return (
     <main className='flex justify-center items-center min-h-screen bg-primary relative'>
       <div className="font-sans max-w-xl mx-auto p-6 bg-secondary text-primary text-center rounded-md shadow-2xl">
-        <h1 className="text-3xl font-bold mb-4">Constitution to Home: Counter Point Community</h1>
+        <h1 className="text-3xl font-bold mb-4">MSF Delhi <strong>MUSLIMAH</strong> Fest</h1>
         {
            !isCropping && !croppedImage ?  (
               <div className="">
-                <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image.png'} className='w-1/2 mx-auto h-auto' />
+                <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image-1.png'} className='w-1/2 mx-auto h-auto' />
                 <input
                   type="file"
                   accept="image/*"
@@ -166,7 +190,7 @@ export default function Home() {
               image={userImage}
               crop={crop}
               zoom={zoom}
-              aspect={1.79}
+              aspect={1}
               onCropChange={setCrop}
               onCropComplete={onCropComplete}
               onZoomChange={setZoom}
