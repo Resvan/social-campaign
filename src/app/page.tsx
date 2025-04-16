@@ -2,11 +2,16 @@
 import React, { useRef, useState, useCallback } from 'react';
 import Cropper, { Area, Point } from 'react-easy-crop';
 import  NextImage from 'next/image';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 
 
 export default function Home() {
 
+  const [userName, setUserName] = useState<string>('');
+  const [showInput, setShowInput] = useState<boolean>(false);
+  const [userNameError, setUserNameError] = useState<boolean>(false);
   const [userImage, setUserImage] = useState<string | null>(null);
   const [croppedArea, setCroppedArea] = useState<Area | null>(null);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
@@ -138,8 +143,40 @@ export default function Home() {
         ctx.clip(); // Apply the clipping path
   
         ctx.drawImage(userImg, x, y, width, height);
-  
         ctx.restore(); // Restore the original context so clipping doesn't affect other drawings
+
+        if (userName) {
+          const boxX = 1084;
+          const boxY = 1344;
+          const boxWidth = 566;
+          const boxHeight = 64;
+          const fontSize = 52;
+          const font = `bold ${fontSize}px sans-serif`;
+        
+          // 🟦 Draw the box (optional: set color)
+          ctx.fillStyle = '#49301E'; // Box background color, change as needed
+          ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+        
+          // 🖊️ Draw the centered text
+          ctx.font = font;
+          ctx.fillStyle = '#FFF'; // Text color
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+        
+          // Trim to 15 characters max
+          let text = userName.length > 15 ? userName.slice(0, 15) : userName;
+        
+          // Further trim if it doesn't fit the box width
+          while (ctx.measureText(text).width > boxWidth && text.length > 0) {
+            text = text.slice(0, -1);
+          }
+        
+          const textX = boxX + boxWidth / 2;
+          const textY = boxY + boxHeight / 2;
+        
+          ctx.fillText(text, textX, textY);
+        }
+        
   
         const finalImageUrl = canvas.toDataURL('image/png');
         setFinalImage(finalImageUrl);
@@ -170,6 +207,39 @@ export default function Home() {
       <div className="font-sans max-w-xl mx-auto p-6 bg-secondary text-primary text-center rounded-md shadow-2xl">
         <h1 className="text-3xl font-bold mb-4">MSF Delhi <strong>MUSLIMAH</strong> Fest</h1>
         {
+          !showInput ? (
+            <div>
+              <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image-1.png'} className='w-1/2 mx-auto h-auto' />
+              <Input
+                type="text"
+                placeholder="Enter your name"
+                value={userName}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setUserName(value);
+                  setUserNameError(value.length > 15);
+                }}
+                className="p-2 my-4 border rounded-md bg-primary-foreground text-black"
+              />
+              <Button onClick={() => setShowInput(true)} disabled={!userName || userNameError} className='w-full max-w-96' variant="default">Create</Button>
+              {
+                userNameError &&
+                <p className='text-red-600 font-sm'>Name must be less than 15 characters</p>
+              }
+            </div>
+          ) : !isCropping && !croppedImage ?  (
+            <div className="">
+              <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image-1.png'} className='w-1/2 mx-auto h-auto' />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="p-2 border rounded-md mt-4 bg-white text-black"
+              />
+            </div>
+          ): null
+          }
+        {/* {
            !isCropping && !croppedImage ?  (
               <div className="">
                 <NextImage height={3500} width={3000} alt='Base Image' src={'/base-image-1.png'} className='w-1/2 mx-auto h-auto' />
@@ -181,7 +251,7 @@ export default function Home() {
                 />
               </div>
             ) : null
-          }
+          } */}
 
 
         {isCropping && userImage && (
